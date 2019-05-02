@@ -54,8 +54,8 @@ extern UART_data_t USART_data2;
 extern telegram_buffer_t telegram2;
 
 void UART_Initialize(UART_data_t * uart_data, telegram_buffer_t* telegram_buffer);
-void UART_PutString(USART_TypeDef* USARTx, uint8_t *str);
-void UART_PutChar(USART_TypeDef* USARTx, uint8_t data);
+void UART_PutString(USART_TypeDef* USARTx, char* str);
+void UART_PutChar(USART_TypeDef* USARTx, char data);
 void UART_GetbyteIrq( UART_data_t* uart_data, uint8_t data);
 uint8_t UART_RXBufferGetChar(UART_data_t* uart_rxc);
 
@@ -63,10 +63,9 @@ uint8_t telegram_PushChar(USART_TypeDef* USARTx, telegram_buffer_t* telegram_buf
 void telegram_Process(USART_TypeDef* USARTx, uint8_t *telegram, uint8_t len);
 
 
-
 void Rcc_Configuration(void);
 void UsartGPIO_Configuration(void);
-void usart_Configuration(void);
+void usart_Configuration(USART_TypeDef* USARTx);
 void UsartGPIO_CTRT_Configuration(void);
 void USART_CTRT_Configuartion(void);
 

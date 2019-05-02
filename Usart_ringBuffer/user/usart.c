@@ -31,13 +31,15 @@ void UsartGPIO_Configuration(void)
 	GPIO_Init(GPIOA, &GPIO_InitStruct);
 }
 
-void usart_Configuration(void)
+void usart_Configuration(USART_TypeDef* USARTx)
 {
+	if(USARTx == USART1)
+	{
 	USART_InitTypeDef USART_InitStruct;
 
 	Rcc_Configuration();
 
-	USART_InitStruct.USART_BaudRate = 115200;
+	USART_InitStruct.USART_BaudRate = 9600;
 	USART_InitStruct.USART_StopBits = USART_StopBits_1;
 	USART_InitStruct.USART_WordLength = USART_WordLength_8b;
 	USART_InitStruct.USART_Parity = USART_Parity_No;
@@ -49,6 +51,7 @@ void usart_Configuration(void)
 	USART_Cmd(USART1, ENABLE);
 
 	UsartGPIO_Configuration();
+	}
 }
 
 void UsartGPIO_CTRT_Configuration(void)
@@ -116,13 +119,13 @@ PUTCHAR_PROTOTYPE
 }
 
 
-void UART_PutChar(USART_TypeDef* USARTx, uint8_t ch)
+void UART_PutChar(USART_TypeDef* USARTx, char ch)
 {
   while(!(USARTx->SR & USART_SR_TXE));
   USARTx->DR = ch;  
 }
 
-void UART_PutString(USART_TypeDef* USARTx,uint8_t* str)
+void UART_PutString(USART_TypeDef* USARTx, char* str)
 {
   while(*str != 0)
   {
@@ -180,12 +183,7 @@ void UART_Initialize(UART_data_t * uart_data, telegram_buffer_t* telegram_buffer
 			 telegram_buffer->count = 0;
 			 
 			 //Process telegram
-					
-				telegram_Process(USARTx, telegram_buffer->buffer, ret);
-						
-			 //else if (USARTx == USART2)
-				 //telegram_Process(USART2, telegram_buffer->buffer, ret);
-				//else;
+				telegram_Process(USARTx, telegram_buffer->buffer, ret);					
 		 }
 		 telegram_buffer->count=0;
 	 }
@@ -199,18 +197,18 @@ void UART_Initialize(UART_data_t * uart_data, telegram_buffer_t* telegram_buffer
 	 return 0;
  }
 
+ 
  void telegram_Process(USART_TypeDef* USARTx,uint8_t *telegram, uint8_t len)
 {
 	if(USARTx == USART1)
 	{
-		UART_PutString(USARTx,"GSM:");
-		UART_PutString(USARTx,telegram);
+		UART_PutString(USARTx,"GSM");
+		UART_PutString(USARTx,(char*)telegram);
 	}
-	else if (USARTx == USART2)
+	else if(USARTx == USART2)
 	{
-		UART_PutString(USARTx,"ESP:");
-		UART_PutChar(USARTx, '2');
+		UART_PutString(USART2,(char*)telegram);
+		UART_PutString(USART2,"\r");
 	}
-	else;
-	
 }
+

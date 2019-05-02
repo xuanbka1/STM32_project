@@ -338,7 +338,7 @@
               <MiscControls></MiscControls>
               <Define>USE_STDPERIPH_DRIVER,STM32F10X_HD</Define>
               <Undefine></Undefine>
-              <IncludePath>..\Lib\inc;..\Lib\cmsis;..\user;..\Lib</IncludePath>
+              <IncludePath>..\Lib\inc;..\Lib\cmsis;..\user;..\Lib;..\device_driver</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -448,7 +448,34 @@
           <GroupName>txt</GroupName>
         </Group>
         <Group>
+          <GroupName>device_driver</GroupName>
+          <Files>
+            <File>
+              <FileName>GSM.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\device_driver\GSM.c</FilePath>
+            </File>
+            <File>
+              <FileName>LoRa.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\device_driver\LoRa.c</FilePath>
+            </File>
+            <File>
+              <FileName>Wifi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\device_driver\Wifi.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>::CMSIS</GroupName>
+          <Files>
+            <File>
+              <FileName>LoRa.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\device_driver\LoRa.c</FilePath>
+            </File>
+          </Files>
         </Group>
       </Groups>
     </Target>
