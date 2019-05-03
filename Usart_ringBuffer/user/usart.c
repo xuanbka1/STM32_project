@@ -1,4 +1,7 @@
+#include <stdio.h>
+#include <string.h>
 #include "usart.h"
+#include "eeprom.h"
 
 
 #ifdef __GNUC__
@@ -200,15 +203,32 @@ void UART_Initialize(UART_data_t * uart_data, telegram_buffer_t* telegram_buffer
  
  void telegram_Process(USART_TypeDef* USARTx,uint8_t *telegram, uint8_t len)
 {
-	if(USARTx == USART1)
+	//if(USARTx == USART1)
+	//{
+	//	UART_PutString(USARTx,"GSM");
+	//	UART_PutString(USARTx,(char*)telegram);
+	//}
+	//else if(USARTx == USART2)
+	//{
+	//	UART_PutString(USART2,(char*)telegram);
+	//	UART_PutString(USART2,"\r");
+	//}
+	
+	if(telegram[0] == 'w')
 	{
-		UART_PutString(USARTx,"GSM");
-		UART_PutString(USARTx,(char*)telegram);
+			uint8_t* tp = telegram+1;
+		uint16_t data =(uint16_t)(atoi(tp));
+		Flash_Write(EEPROM_START_ADDRESS, data);
+		
+		UART_PutString(USART1, " write rom ok");
 	}
-	else if(USARTx == USART2)
+	
+	if(telegram[0] == 'r')
 	{
-		UART_PutString(USART2,(char*)telegram);
-		UART_PutString(USART2,"\r");
+		char buffer[50];
+		uint16_t data = Flash_Read(EEPROM_START_ADDRESS);
+		sprintf(buffer," flash is: %d", data);
+		UART_PutString(USART1, buffer);				
 	}
 }
 

@@ -1,5 +1,7 @@
 #include <stm32f10x.h>
 #include "usart.h"
+#include "eeprom.h"
+#include <stm32f10x_flash.h>
 //#define CTRT
 #include "stdio.h"
 #include "string.h"
@@ -181,6 +183,9 @@ UART_PutString(USART3," hello stm32 usart33333");
 		telegram_PushChar(USART1, &telegram_PC, data);
 		}
 		
+		//Flash_Write(EEPROM_START_ADDRESS + 1, 1234);
+		
+		
 	}
 
 }
@@ -218,3 +223,6 @@ void USART3_IRQHandler(void)
 		UART_GetbyteIrq(&USART_PCdata,(uint8_t)data);    
   }
 }
+
+
+

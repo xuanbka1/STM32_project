@@ -407,6 +407,11 @@
               <FileType>1</FileType>
               <FilePath>..\Lib\src\misc.c</FilePath>
             </File>
+            <File>
+              <FileName>stm32f10x_flash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Lib\src\stm32f10x_flash.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -431,6 +436,16 @@
               <FileName>system_stm32f10x.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\user\system_stm32f10x.c</FilePath>
+            </File>
+            <File>
+              <FileName>eeprom.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\user\eeprom.c</FilePath>
+            </File>
+            <File>
+              <FileName>systick_timer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\user\systick_timer.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -469,13 +484,6 @@
         </Group>
         <Group>
           <GroupName>::CMSIS</GroupName>
-          <Files>
-            <File>
-              <FileName>LoRa.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\device_driver\LoRa.c</FilePath>
-            </File>
-          </Files>
         </Group>
       </Groups>
     </Target>
