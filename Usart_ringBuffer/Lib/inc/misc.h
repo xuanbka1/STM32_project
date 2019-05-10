@@ -53,7 +53,7 @@ typedef struct
                                                    This parameter can be a value of @ref IRQn_Type 
                                                    (For the complete STM32 Devices IRQ Channels list, please
                                                     refer to stm32f10x.h file) */
-
+	
   uint8_t NVIC_IRQChannelPreemptionPriority;  /*!< Specifies the pre-emption priority for the IRQ channel
                                                    specified in NVIC_IRQChannel. This parameter can be a value
                                                    between 0 and 15 as described in the table @ref NVIC_Priority_Table */

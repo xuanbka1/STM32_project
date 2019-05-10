@@ -4,6 +4,7 @@
 #include "stdio.h"
 #include "string.h"
 
+#include "AT24C02.h"
 #include "GSM.h"
 
 #define USART_PC  USART3
@@ -11,12 +12,7 @@
 UART_data_t USART_data1;
 telegram_buffer_t telegram1;
 
-UART_data_t USART_data2;
-telegram_buffer_t telegram2;
 
-// usart data PC command //
-UART_data_t USART_PCdata;
-telegram_buffer_t telegram_PC;
 
 void UART2_Configuration (USART_TypeDef* USARTx);
 void UART3_Configuration (USART_TypeDef* USARTx);
@@ -140,47 +136,34 @@ void UART2_Configuration (USART_TypeDef* USARTx)
 	
 	
 uint8_t  data;
+	uint16_t Addr;
+	uint8_t WriteBuffer[2],ReadBuffer[2];
+	
+	
 int main(void)
 {
+	
+	
 	SystemInit();
 
-	UART2_Configuration(USART2);
-	UART3_Configuration(USART3);
 	usart_Configuration(USART1);	
 	NVIC_Configuration();
+	I2C_Configuration();
 	
-	
-UART_PutString(USART1," hello stm32 usart11111");
-UART_PutString(USART2," hello stm32 usart22222");
-UART_PutString(USART3," hello stm32 usart33333");
+UART_PutString(USART1," i2c eeprom control via uart and i2c");
+
 
   	while(1)
 	{
-		
-		while(USART_data2.RXin_ptr != USART_data2.RXout_ptr)
-		{
-		data = UART_RXBufferGetChar(&USART_data2);
-		telegram_PushChar(USART1, &telegram2, data);
-		}
-		
-		
-		
+				
 		// get data form PC via USART1 and forward to USART2 //
 		while(USART_data1.RXin_ptr != USART_data1.RXout_ptr)
 		{
 			data = UART_RXBufferGetChar(&USART_data1);
 			//telegramPC_PushChar(USART2, &telegram1, data);
-			telegram_PushChar(USART2, &telegram1, data);
+			telegram_PushChar(USART1, &telegram1, data);
 		}
-		
-		
-		
-		while(USART_PCdata.RXin_ptr != USART_PCdata.RXout_ptr)
-		{
-		data = UART_RXBufferGetChar(&USART_PCdata);
-		telegram_PushChar(USART1, &telegram_PC, data);
-		}
-		
+				
 	}
 
 }
@@ -199,22 +182,31 @@ void USART1_IRQHandler(void)
 	
 }
 
-/*interrupt usart2 */
-void USART2_IRQHandler(void)
-{
-  if(USART_GetITStatus(USART2, USART_IT_RXNE) != RESET)
-  {	
-		uint16_t data = USART_ReceiveData(USART2);
-		UART_GetbyteIrq(&USART_data2,(uint8_t)data);    
-  }
-}
 
-/*interrupt usart3 */
-void USART3_IRQHandler(void)
+void telegram_Process(USART_TypeDef* USARTx,uint8_t *telegram, uint8_t len)
 {
-  if(USART_GetITStatus(USART_PC, USART_IT_RXNE) != RESET)
-  {	
-		uint16_t data = USART_ReceiveData(USART_PC);
-		UART_GetbyteIrq(&USART_PCdata,(uint8_t)data);    
-  }
+	char buff[50];
+		UART_PutString(USARTx,(char*)telegram);
+	if(telegram[0]== 'a')
+	{
+		
+		uint8_t data = telegram[1] - 0x30 +1;
+		
+		uint8_t* str = telegram+1;
+		uint8_t x = (uint8_t)atoi(str);
+		
+   	WriteBuffer[0]= data;	
+			WriteBuffer[1]= x +10;	
+		I2C_Write(I2C1,ADDR_24LC02,0,WriteBuffer,sizeof(WriteBuffer) );
+	}
+	
+	if(telegram[0] == 'b')
+	{
+		I2C_Read(I2C1,ADDR_24LC02,0,ReadBuffer,sizeof(WriteBuffer) );
+		 
+			for(Addr=0; Addr<2; Addr++){
+		sprintf(buff, " rom is %d", ReadBuffer[Addr]);
+		UART_PutString(USART1, buff);}
+	}
+	
 }

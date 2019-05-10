@@ -198,17 +198,11 @@ void UART_Initialize(UART_data_t * uart_data, telegram_buffer_t* telegram_buffer
  }
 
  
- void telegram_Process(USART_TypeDef* USARTx,uint8_t *telegram, uint8_t len)
-{
-	if(USARTx == USART1)
-	{
-		UART_PutString(USARTx,"GSM");
-		UART_PutString(USARTx,(char*)telegram);
-	}
-	else if(USARTx == USART2)
-	{
-		UART_PutString(USART2,(char*)telegram);
-		UART_PutString(USART2,"\r");
-	}
-}
+//extern  void telegram_Process(USART_TypeDef* USARTx,uint8_t *telegram, uint8_t len)
+//{
+//	
+//		UART_PutString(USARTx,"GSM");
+//		UART_PutString(USARTx,(char*)telegram);
+//	
+//}
 

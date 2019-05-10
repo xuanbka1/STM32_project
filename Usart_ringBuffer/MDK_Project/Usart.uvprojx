@@ -380,7 +380,17 @@
       </TargetOption>
       <Groups>
         <Group>
-          <GroupName>lib</GroupName>
+          <GroupName>Startup</GroupName>
+          <Files>
+            <File>
+              <FileName>startup_stm32f10x_hd.s</FileName>
+              <FileType>2</FileType>
+              <FilePath>..\Lib\startup\arm\startup_stm32f10x_hd.s</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>StdPriph_Driver</GroupName>
           <Files>
             <File>
               <FileName>core_cm3.c</FileName>
@@ -407,10 +417,15 @@
               <FileType>1</FileType>
               <FilePath>..\Lib\src\misc.c</FilePath>
             </File>
+            <File>
+              <FileName>stm32f10x_i2c.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Lib\src\stm32f10x_i2c.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>user</GroupName>
+          <GroupName>User</GroupName>
           <Files>
             <File>
               <FileName>main.c</FileName>
@@ -432,20 +447,12 @@
               <FileType>1</FileType>
               <FilePath>..\user\system_stm32f10x.c</FilePath>
             </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>start</GroupName>
-          <Files>
             <File>
-              <FileName>startup_stm32f10x_hd.s</FileName>
-              <FileType>2</FileType>
-              <FilePath>..\Lib\startup\arm\startup_stm32f10x_hd.s</FilePath>
+              <FileName>AT24C02.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\user\AT24C02.c</FilePath>
             </File>
           </Files>
-        </Group>
-        <Group>
-          <GroupName>txt</GroupName>
         </Group>
         <Group>
           <GroupName>device_driver</GroupName>
@@ -469,13 +476,6 @@
         </Group>
         <Group>
           <GroupName>::CMSIS</GroupName>
-          <Files>
-            <File>
-              <FileName>LoRa.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\device_driver\LoRa.c</FilePath>
-            </File>
-          </Files>
         </Group>
       </Groups>
     </Target>
