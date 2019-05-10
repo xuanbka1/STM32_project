@@ -407,6 +407,11 @@
               <FileType>1</FileType>
               <FilePath>..\Lib\src\misc.c</FilePath>
             </File>
+            <File>
+              <FileName>stm32f10x_spi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Lib\src\stm32f10x_spi.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -431,6 +436,11 @@
               <FileName>system_stm32f10x.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\user\system_stm32f10x.c</FilePath>
+            </File>
+            <File>
+              <FileName>driver_spi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\user\driver_spi.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -469,13 +479,6 @@
         </Group>
         <Group>
           <GroupName>::CMSIS</GroupName>
-          <Files>
-            <File>
-              <FileName>LoRa.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\device_driver\LoRa.c</FilePath>
-            </File>
-          </Files>
         </Group>
       </Groups>
     </Target>
