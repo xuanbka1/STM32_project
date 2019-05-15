@@ -34,15 +34,19 @@ void NVIC_Configuration(void)
   NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;  
   NVIC_Init(&NVIC_InitStructure);	
 }
+	//// for eeprom //
+#define SPI_BUFFER_SIZE 255
+u8 DataByte=0;
+u8 Tx_Buffer[SPI_BUFFER_SIZE];
+u8 Rx_Buffer[SPI_BUFFER_SIZE];
 
+vu32 FLASH_ID = 0;
 
-	
-	
 uint8_t  data;
-	
-		uint8_t num=0;
-	uint8_t ID[4];
-	uint8_t data_spi[25];
+uint8_t num=0;
+uint8_t ID[4];
+uint8_t data_spi[25];
+int i;
 int main(void)
 {
 	SystemInit();
@@ -50,44 +54,69 @@ int main(void)
 	usart_Configuration(USART1);	
 	NVIC_Configuration();
 	
-	
-
-		
-	AT45DBXX_Init();
-	printf("AT45DBXX had been Init!\r\n");
-	AT45DBXX_Read_ID(ID);
-	printf("AT45DBXX ID is");
-	for(num=0;num<4;num++)
-	{
-		printf(" 0x%x ",ID[num]);
-	}
-	printf("\r\nWrite 255 byte data to buff1:\r\n");
-	for(num=0;num<255;num++){
-		write_buffer(num,num);
-		printf(" %d ",num);
-	}
-	printf("\r\nRead 255 byte data from buff1:\r\n");
-	for(num=0;num<255;num++){
-		data_spi[num] = read_buffer(num);
-		printf(" %d ",data_spi[num]);
-	}
-	
+	SPI_FLASH_Init();
 	
 UART_PutString(USART1," solution SPi Flash !!!! ");
+printf(" hello spi1");
 
-
-  	while(1)
+	for(i=0; i<1000; i++)
 	{
-		
-		
+		Tx_Buffer[i]  = i;
+	}
+	
+	while(1)
+	{		
 		while(USART_data1.RXin_ptr != USART_data1.RXout_ptr)
 		{
 		data = UART_RXBufferGetChar(&USART_data1);
 		telegram_PushChar(USART1, &telegram1, data);
-		}
-		
+		}		
 	}
+}
 
+// process buffer data //
+ void telegram_Process(USART_TypeDef* USARTx,uint8_t *telegram, uint8_t len)
+{
+	
+	UART_PutString(USARTx,(char*)telegram);
+	UART_PutString(USARTx,"\r");
+	// struct of telegram //
+	/*
+	telegram[0] : w = write , r = read
+	telegram[1] : address 
+	telegram[2] : val
+	*/
+	if(telegram[0] == 'w')
+	{
+		uint8_t add = telegram[1] - 0x30;
+		uint8_t val = telegram[2] - 0x30;
+		SPI_FLASH_ByteWrite(add, val);
+		printf(" write %d to add %d \n\r ", val, add);
+	}
+	
+	if(telegram[0] == 'r')
+	{
+		
+		uint8_t add = telegram[1] - 0x30;
+		uint8_t val =	SPI_FLASH_ByteRead(add);
+		printf(" val from add %d is :%d \n\r  ",add, val);
+	}
+	
+	// write multibyte //
+	
+	SPI_FLASH_PageWrite(Tx_Buffer, 0x01F01F, SPI_BUFFER_SIZE);
+  for(i =0; i<SPI_BUFFER_SIZE; i++)
+	{
+			printf(" write %d \n\r", Tx_Buffer[i]);
+	}
+	
+	printf("----------------------------------------------\n\r");
+	
+  SPI_FLASH_BufferRead(Rx_Buffer, 0x01F01F, SPI_BUFFER_SIZE);
+	 for( i =0; i<SPI_BUFFER_SIZE; i++)
+	{
+			printf(" data read from flash %d \n\r", Rx_Buffer[i]);
+	}
 }
 
 
